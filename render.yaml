@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: spendguru-www
+    runtime: node
+    plan: free
+    buildCommand: yarn install --frozen-lockfile && yarn build
+    startCommand: yarn start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NEXT_PUBLIC_SANITY_PROJECT_ID
+        sync: false
+      - key: NEXT_PUBLIC_SANITY_DATASET
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
