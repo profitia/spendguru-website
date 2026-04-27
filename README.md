@@ -178,7 +178,58 @@ Każdy dokument `page`, `post`, `caseStudy`, `landingPage` posiada pole SEO:
 
 ### Wielojęzyczność (PL/EN)
 
-Dokument `page` ma pole `Język` (pl/en). Routing i/18n na poziomie frontendu — do zaimplementowania w kolejnym etapie.
+Dokument `page` ma pole `Język` (pl/en). Routing i18n na poziomie frontendu — do zaimplementowania w kolejnym etapie.
+
+---
+
+## Seedowanie danych (Sanity)
+
+Skrypt `scripts/seed-sanity-home.mjs` załaduje pierwszą treść do Sanity: stronę główną ze wszystkimi sekcjami, personami i FAQ.
+
+### 1. Wygeneruj token do zapisu
+
+1. Otwórz [sanity.io/manage](https://sanity.io/manage)
+2. Wybierz projekt SpendGuru (`1me4kdi5`)
+3. Przejdź do: **API → Tokens → Add API token**
+4. Nazwa: np. `seed-local`, uprawnienia: **Editor**
+5. Skopiuj token
+
+### 2. Dodaj token do .env.local
+
+```bash
+# .env.local
+SANITY_API_WRITE_TOKEN=sk...twój_token_tutaj
+NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
+```
+
+### 3. Uruchom seed
+
+```bash
+# Podgląd bez zapisu (bezpieczne)
+npm run seed:sanity:home:dry
+
+# Pierwsze uruchomienie — tworzy dokumenty
+npm run seed:sanity:home
+
+# Nadpisanie istniejących dokumentów
+npm run seed:sanity:home:force
+```
+
+### 4. Sprawdź wynik w Studio
+
+- Lokalne: http://localhost:3000/studio
+- Produkcja: https://spendguru-website.onrender.com/studio
+
+Przejdź do **Strony** — powinien pojawić się dokument `Strona główna` ze wszystkimi sekcjami.
+Przejdź do **Persona / Dla kogo** — 5 person.
+Przejdź do **FAQ** — 5 pytań z kontekstem `ogolny`.
+
+### Idempotentność
+
+Skrypt jest bezpieczny przy wielokrotnym uruchomieniu:
+- Bez flag: pomija dokumenty, które już istnieją (wyświetla ⏭)
+- Z `--force`: zastępuje istniejące (`createOrReplace`)
+- Z `--dry-run`: wyświetla co zostałoby zapisane, nic nie zmienia
 
 ---
 

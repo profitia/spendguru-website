@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed:sanity:home": "node --env-file=.env.local scripts/seed-sanity-home.mjs",
+    "seed:sanity:home:dry": "node --env-file=.env.local scripts/seed-sanity-home.mjs --dry-run",
+    "seed:sanity:home:force": "node --env-file=.env.local scripts/seed-sanity-home.mjs --force"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",
