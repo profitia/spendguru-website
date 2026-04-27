@@ -3,80 +3,100 @@
 import Link from 'next/link'
 import { mainNav, ctaNav } from '@/data/navigation'
 import { Button } from '@/components/ui/Button'
-import { cn } from '@/lib/utils'
 
 interface MobileNavProps {
+  id?: string
   isOpen: boolean
   onClose: () => void
 }
 
-export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
+export default function MobileNav({ id, isOpen, onClose }: MobileNavProps) {
   return (
     <>
-      {/* Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/20 lg:hidden"
-          onClick={onClose}
-          aria-hidden
-        />
-      )}
-
-      {/* Drawer */}
+      {/* Overlay — klikalny, zamyka menu. Widoczny tylko gdy isOpen i poniżej lg */}
       <div
-        className={cn(
-          'fixed top-0 right-0 z-50 h-full w-full max-w-[360px] overflow-x-hidden overflow-y-auto bg-white shadow-[var(--shadow-lg)] transform transition-transform duration-300 lg:hidden',
-          isOpen ? 'translate-x-0' : 'translate-x-full',
-        )}
-        aria-label="Menu mobilne"
+        className={[
+          'fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 lg:hidden',
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+        ].join(' ')}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Drawer — wysuwa się z prawej strony */}
+      <div
+        id={id}
         role="dialog"
-        aria-modal
+        aria-modal="true"
+        aria-label="Menu mobilne"
+        className={[
+          'fixed top-0 right-0 z-50 h-dvh w-full max-w-[360px]',
+          'flex flex-col bg-white shadow-xl',
+          'transform transition-transform duration-300 ease-in-out lg:hidden',
+          isOpen ? 'translate-x-0' : 'translate-x-full',
+        ].join(' ')}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-neutral-200)]">
-          <span className="font-bold text-lg">
+        {/* Header drawera — logo + przycisk zamknięcia */}
+        <div className="flex shrink-0 items-center justify-between px-5 py-4 border-b border-gray-200">
+          <Link
+            href="/"
+            onClick={onClose}
+            className="font-bold text-lg text-gray-900"
+          >
             <span className="text-[var(--color-primary)]">Spend</span>Guru
-          </span>
+          </Link>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 text-[var(--color-neutral-500)] hover:text-[var(--color-foreground)]"
             aria-label="Zamknij menu"
+            className="flex items-center justify-center w-9 h-9 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
-              <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path
+                d="M4 4l12 12M16 4L4 16"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
         </div>
 
-        <nav className="px-5 py-4 flex flex-col gap-1">
-          {mainNav.map((item) => (
-            <div key={item.href}>
-              <Link
-                href={item.href}
-                onClick={onClose}
-                className="block py-2.5 text-base font-medium text-[var(--color-neutral-700)] hover:text-[var(--color-primary)]"
-              >
-                {item.label}
-              </Link>
-              {item.children && (
-                <div className="ml-4 flex flex-col gap-1 border-l border-[var(--color-neutral-200)] pl-3">
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.href}
-                      href={child.href}
-                      onClick={onClose}
-                      className="block py-1.5 text-sm text-[var(--color-neutral-500)] hover:text-[var(--color-primary)]"
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+        {/* Nawigacja — flex-1 + overflow-y-auto, żeby linki były zawsze widoczne */}
+        <nav className="flex-1 overflow-y-auto px-5 py-5" aria-label="Menu mobilne">
+          <ul className="flex flex-col gap-0">
+            {mainNav.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={onClose}
+                  className="flex items-center py-3 text-base font-medium text-gray-800 hover:text-[var(--color-primary)] border-b border-gray-100 transition-colors"
+                >
+                  {item.label}
+                </Link>
+                {/* Podlinki */}
+                {item.children && item.children.length > 0 && (
+                  <ul className="ml-4 mb-1 flex flex-col border-l-2 border-gray-100">
+                    {item.children.map((child) => (
+                      <li key={child.href}>
+                        <Link
+                          href={child.href}
+                          onClick={onClose}
+                          className="flex items-center py-2 pl-3 text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors"
+                        >
+                          {child.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
         </nav>
 
-        <div className="px-5 pt-2">
+        {/* CTA — przypięte na dole drawera */}
+        <div className="shrink-0 px-5 py-5 border-t border-gray-200">
           <Button href={ctaNav.href} className="w-full" onClick={onClose}>
             {ctaNav.label}
           </Button>
