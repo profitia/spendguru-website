@@ -24,7 +24,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-6" aria-label="Nawigacja główna">
+          <nav className="hidden md:flex items-center gap-6" aria-label="Nawigacja główna">
             {mainNav.map((item) => (
               <div key={item.href} className="relative group">
                 <Link
@@ -61,11 +61,11 @@ export default function Header() {
               {ctaNav.label}
             </Button>
 
-            {/* Hamburger */}
+            {/* Hamburger — tylko mobile/tablet */}
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 text-[var(--color-neutral-700)] hover:text-[var(--color-primary)]"
+              className="md:hidden p-2 text-[var(--color-neutral-700)] hover:text-[var(--color-primary)]"
               aria-label="Otwórz menu"
               aria-expanded={mobileOpen}
             >

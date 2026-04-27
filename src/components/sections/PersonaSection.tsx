@@ -2,17 +2,24 @@ import { Container } from '@/components/layout/Container'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
-import type { PersonaBlock } from '@/sanity/types/sanity.types'
 import { placeholderPersonas } from '@/data/placeholder-content'
 
-interface PersonaSectionProps {
-  data?: PersonaBlock
+interface Persona {
+  title: string
+  role: string
+  description: string
+  painPoints: string[]
 }
 
-export function PersonaSection({ data }: PersonaSectionProps) {
-  const heading = data?.heading ?? 'Dla kogo jest SpendGuru?'
-  const personas = data?.personas ?? placeholderPersonas
+interface PersonaSectionProps {
+  heading?: string
+  personas?: Persona[]
+}
 
+export function PersonaSection({
+  heading = 'Dla kogo jest SpendGuru?',
+  personas = placeholderPersonas,
+}: PersonaSectionProps) {
   return (
     <section className="py-[var(--spacing-section)] bg-white">
       <Container>
@@ -26,20 +33,20 @@ export function PersonaSection({ data }: PersonaSectionProps) {
           {personas.map((persona, i) => (
             <Card key={i} variant="bordered" className="flex flex-col gap-4">
               <div>
-                <Badge variant="primary" className="mb-3">{(persona as { role?: string }).role || (persona as { title: string }).title}</Badge>
+                <Badge variant="primary" className="mb-3">{persona.role}</Badge>
                 <h3 className="font-semibold text-[var(--color-neutral-900)]">
-                  {(persona as { title: string }).title}
+                  {persona.title}
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-neutral-500)] leading-relaxed">
-                  {(persona as { description?: string }).description}
+                  {persona.description}
                 </p>
               </div>
-              {(persona as { benefits?: string[] }).benefits && (
+              {persona.painPoints.length > 0 && (
                 <ul className="flex flex-col gap-1.5">
-                  {((persona as { benefits: string[] }).benefits).slice(0, 3).map((benefit, j) => (
+                  {persona.painPoints.slice(0, 3).map((point, j) => (
                     <li key={j} className="flex items-start gap-2 text-sm text-[var(--color-neutral-700)]">
-                      <span className="text-[var(--color-success)] mt-0.5" aria-hidden>✓</span>
-                      {benefit}
+                      <span className="text-[var(--color-neutral-400)] mt-0.5" aria-hidden>—</span>
+                      {point}
                     </li>
                   ))}
                 </ul>

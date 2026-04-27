@@ -1,21 +1,29 @@
 import { Container } from '@/components/layout/Container'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { Button } from '@/components/ui/Button'
-import type { CtaBlock } from '@/sanity/types/sanity.types'
 import { cn } from '@/lib/utils'
 import { MAIN_CTA } from '@/lib/constants'
 
 interface CtaSectionProps {
-  data?: CtaBlock
+  heading?: string
+  subheading?: string
+  ctaLabel?: string
+  ctaUrl?: string
+  ctaSecondary?: { label: string; href: string }[]
+  variant?: 'default' | 'dark' | 'brand'
 }
 
-export function CtaSection({ data }: CtaSectionProps) {
-  const heading = data?.heading ?? 'Gotowy na lepsze negocjacje?'
-  const subheading = data?.subheading ?? 'Umów bezpłatne wsparcie i sprawdź, jak SpendGuru może wzmocnić Twój kolejny przetarg.'
-  const ctaLabel = data?.ctaLabel ?? MAIN_CTA.label
-  const ctaUrl = data?.ctaUrl ?? MAIN_CTA.href
-  const variant = data?.variant ?? 'default'
-
+export function CtaSection({
+  heading = 'Zanim następna runda negocjacyjna — zadbaj o przygotowanie.',
+  subheading = 'Umów bezpłatne wsparcie i sprawdź, jak SpendGuru wzmocni Twój kolejny przetarg z dostawcą.',
+  ctaLabel = MAIN_CTA.label,
+  ctaUrl = MAIN_CTA.href,
+  ctaSecondary = [
+    { label: 'Zobacz, jak to działa', href: '/jak-to-dziala' },
+    { label: 'Poznaj etapy przygotowania', href: '/etapy-przygotowania-negocjacji' },
+  ],
+  variant = 'default',
+}: CtaSectionProps) {
   return (
     <section
       className={cn(
@@ -32,14 +40,19 @@ export function CtaSection({ data }: CtaSectionProps) {
             subheading={subheading}
             align="center"
           />
-          <div className="mt-10">
-            <Button
-              href={ctaUrl}
-              size="lg"
-              variant={variant === 'default' ? 'primary' : 'secondary'}
-            >
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <Button href={ctaUrl} size="lg">
               {ctaLabel}
             </Button>
+            {ctaSecondary.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                {ctaSecondary.map((item) => (
+                  <Button key={item.href} href={item.href} variant="ghost" size="sm">
+                    {item.label}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </Container>

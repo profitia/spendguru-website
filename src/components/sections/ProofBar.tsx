@@ -1,32 +1,30 @@
 import { Container } from '@/components/layout/Container'
-import type { ProofBarBlock } from '@/sanity/types/sanity.types'
+import { placeholderProofBar } from '@/data/placeholder-content'
 
-interface ProofBarProps {
-  data?: ProofBarBlock
+interface ProofBarItem {
+  value: string
+  label: string
 }
 
-export function ProofBar({ data }: ProofBarProps) {
-  const items = data?.items ?? []
-  const label = data?.label ?? 'Zaufali nam'
+interface ProofBarProps {
+  items?: ProofBarItem[]
+}
 
-  if (!items.length) return null
-
+export function ProofBar({ items = placeholderProofBar.items }: ProofBarProps) {
   return (
-    <div className="border-y border-[var(--color-neutral-200)] bg-[var(--color-neutral-50)] py-6">
+    <div className="border-y border-[var(--color-neutral-200)] bg-[var(--color-neutral-50)] py-8">
       <Container>
-        <div className="flex flex-col items-center gap-6 sm:flex-row sm:flex-wrap sm:justify-center">
-          {label && (
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-neutral-400)]">
-              {label}
-            </p>
-          )}
-          <div className="flex flex-wrap justify-center gap-8">
-            {items.map((item, i) => (
-              <div key={i} className="text-sm text-[var(--color-neutral-400)] font-medium">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+          {items.map((item, i) => (
+            <div key={i} className="text-center">
+              <p className="text-2xl sm:text-3xl font-bold text-[var(--color-primary)]">
                 {item.value}
-              </div>
-            ))}
-          </div>
+              </p>
+              <p className="mt-1 text-xs text-[var(--color-neutral-500)] leading-snug">
+                {item.label}
+              </p>
+            </div>
+          ))}
         </div>
       </Container>
     </div>
