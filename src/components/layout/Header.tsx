@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-[var(--color-neutral-200)] bg-white/95 backdrop-blur-sm overflow-x-hidden">
+      <header className="sticky top-0 z-40 w-full border-b border-[var(--color-neutral-200)] bg-white/95 backdrop-blur-sm">
         <Container>
           <div className="flex h-16 items-center justify-between lg:h-[72px]">
 
@@ -28,11 +28,8 @@ export default function Header() {
               </span>
             </Link>
 
-            {/* Desktop nav — TYLKO od lg (1024px+) */}
-            <nav
-              className="hidden lg:flex items-center gap-5"
-              aria-label="Nawigacja główna"
-            >
+            {/* Desktop nav — wyłącznie od lg (≥1024px) */}
+            <nav className="hidden lg:flex items-center gap-5" aria-label="Nawigacja główna">
               {mainNav.map((item) => (
                 <div key={item.href} className="relative group">
                   <Link
@@ -45,7 +42,6 @@ export default function Header() {
                     {item.label}
                   </Link>
 
-                  {/* Dropdown */}
                   {item.children && (
                     <div className="absolute top-full left-0 mt-1 hidden group-hover:block w-56 rounded-[var(--radius-md)] border border-[var(--color-neutral-200)] bg-white shadow-[var(--shadow-lg)] py-1 z-50">
                       {item.children.map((child) => (
@@ -63,19 +59,15 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* Prawa strona headera */}
-            <div className="flex items-center gap-3">
+            {/* Prawa strona — CTA (desktop) + hamburger (mobile/tablet) */}
+            <div className="flex items-center gap-2">
               {/*
-                CTA — TYLKO desktop (lg+).
-                Owinięte w div, NIE jako className="hidden lg:inline-flex" na Button,
-                żeby uniknąć konfliktu z inline-flex base class w Tailwind v4.
+                CTA widoczne TYLKO na desktop (lg+).
+                Wrapper 'hidden lg:block' kontroluje wyświetlanie niezależnie
+                od klas wewnętrznych Button — unika konfliktu z base 'inline-flex'.
               */}
               <div className="hidden lg:block">
-                <Button
-                  href={ctaNav.href}
-                  size="sm"
-                  className="whitespace-nowrap"
-                >
+                <Button href={ctaNav.href} size="sm" className="whitespace-nowrap">
                   {ctaNav.label}
                 </Button>
               </div>
@@ -84,14 +76,14 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setMobileOpen(true)}
-                className="lg:hidden flex items-center justify-center p-2 rounded-md text-[var(--color-neutral-700)] hover:text-[var(--color-primary)] hover:bg-[var(--color-neutral-100)] transition-colors"
+                className="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-[var(--color-neutral-700)] hover:text-[var(--color-primary)] hover:bg-[var(--color-neutral-100)] transition-colors"
                 aria-label="Otwórz menu"
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-nav"
               >
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
-                    d="M3 5h16M3 11h16M3 17h16"
+                    d="M4 6h16M4 12h16M4 18h16"
                     stroke="currentColor"
                     strokeWidth="2"
                     strokeLinecap="round"
@@ -104,7 +96,7 @@ export default function Header() {
         </Container>
       </header>
 
-      {/* MobileNav renderowany POZA <header>, jako sibling w DOM */}
+      {/* MobileNav poza <header> — fixed positioning nie zależy od rodzica */}
       <MobileNav
         id="mobile-nav"
         isOpen={mobileOpen}

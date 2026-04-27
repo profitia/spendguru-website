@@ -13,35 +13,29 @@ interface MobileNavProps {
 export default function MobileNav({ id, isOpen, onClose }: MobileNavProps) {
   return (
     <>
-      {/* Overlay — klikalny, zamyka menu. Widoczny tylko gdy isOpen i poniżej lg */}
+      {/* Overlay: fixed inset-0 z-40 — zawsze w DOM, widoczność przez opacity */}
       <div
-        className={[
-          'fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 lg:hidden',
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
-        ].join(' ')}
-        onClick={onClose}
         aria-hidden="true"
+        onClick={onClose}
+        style={{ display: isOpen ? 'block' : 'none' }}
+        className="fixed inset-0 z-40 bg-black/40"
       />
 
-      {/* Drawer — wysuwa się z prawej strony */}
+      {/* Drawer: fixed inset-y-0 right-0 z-50 — wysuwa się z prawej, zawsze w DOM */}
       <div
         id={id}
         role="dialog"
         aria-modal="true"
         aria-label="Menu mobilne"
-        className={[
-          'fixed top-0 right-0 z-50 h-dvh w-full max-w-[360px]',
-          'flex flex-col bg-white shadow-xl',
-          'transform transition-transform duration-300 ease-in-out lg:hidden',
-          isOpen ? 'translate-x-0' : 'translate-x-full',
-        ].join(' ')}
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-sm flex flex-col bg-white shadow-2xl transition-transform duration-300 ease-in-out"
+        style={{ transform: isOpen ? 'translateX(0)' : 'translateX(100%)' }}
       >
-        {/* Header drawera — logo + przycisk zamknięcia */}
+        {/* Nagłówek drawera — logo + przycisk X */}
         <div className="flex shrink-0 items-center justify-between px-5 py-4 border-b border-gray-200">
           <Link
             href="/"
             onClick={onClose}
-            className="font-bold text-lg text-gray-900"
+            className="shrink-0 font-bold text-lg text-gray-900 leading-none"
           >
             <span className="text-[var(--color-primary)]">Spend</span>Guru
           </Link>
@@ -49,7 +43,7 @@ export default function MobileNav({ id, isOpen, onClose }: MobileNavProps) {
             type="button"
             onClick={onClose}
             aria-label="Zamknij menu"
-            className="flex items-center justify-center w-9 h-9 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            className="inline-flex items-center justify-center w-9 h-9 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path
@@ -62,27 +56,31 @@ export default function MobileNav({ id, isOpen, onClose }: MobileNavProps) {
           </button>
         </div>
 
-        {/* Nawigacja — flex-1 + overflow-y-auto, żeby linki były zawsze widoczne */}
-        <nav className="flex-1 overflow-y-auto px-5 py-5" aria-label="Menu mobilne">
-          <ul className="flex flex-col gap-0">
+        {/* Nawigacja — rośnie do dostępnej przestrzeni, scrolluje gdy potrzeba */}
+        <nav
+          className="flex-1 overflow-y-auto px-5 py-4"
+          aria-label="Menu mobilne"
+        >
+          <ul>
             {mainNav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   onClick={onClose}
-                  className="flex items-center py-3 text-base font-medium text-gray-800 hover:text-[var(--color-primary)] border-b border-gray-100 transition-colors"
+                  className="flex items-center py-3 text-base font-medium text-gray-900 border-b border-gray-100 hover:text-[var(--color-primary)] transition-colors"
                 >
                   {item.label}
                 </Link>
-                {/* Podlinki */}
+
+                {/* Podlinki (np. "Zastosowania") */}
                 {item.children && item.children.length > 0 && (
-                  <ul className="ml-4 mb-1 flex flex-col border-l-2 border-gray-100">
+                  <ul className="my-1 ml-3 border-l-2 border-gray-100">
                     {item.children.map((child) => (
                       <li key={child.href}>
                         <Link
                           href={child.href}
                           onClick={onClose}
-                          className="flex items-center py-2 pl-3 text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors"
+                          className="flex items-center py-2 pl-4 text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors"
                         >
                           {child.label}
                         </Link>
