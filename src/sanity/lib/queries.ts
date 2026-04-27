@@ -24,7 +24,8 @@ export const homePageQuery = groq`
         "items": *[_type == "faq" && context == ^.context] | order(order asc) {
           _id,
           question,
-          "answer": pt::text(answer)
+          // array::join jest bezpieczniejsze niż pt::text() (brak zależności od wersji GROQ)
+          "answer": array::join(answer[].children[].text, " ")
         }
       }
     }

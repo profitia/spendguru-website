@@ -6,7 +6,7 @@
  * zwraca null — page.tsx obsługuje fallback do placeholder-content.ts.
  */
 
-import { client, isSanityConfigured } from './client'
+import { previewClient, isSanityConfigured } from './client'
 import { homePageQuery } from './queries'
 
 // ─── TYPY ────────────────────────────────────────────────────────────────────
@@ -193,10 +193,12 @@ export async function getHomePage(): Promise<HomePageData | null> {
   }
 
   try {
-    const data = await client.fetch<HomePageData | null>(homePageQuery, {}, {
-      // next.js cache: revalidate co 60 sekund (ISR)
-      next: { revalidate: 60 },
-    })
+    // previewClient (useCdn: false) — zawsze świeże dane z API, bez CDN cache
+    const data = await previewClient.fetch<HomePageData | null>(
+      homePageQuery,
+      {},
+      { next: { revalidate: 60 } },
+    )
     return data ?? null
   } catch (err) {
     // Nie wyrzucamy — strona pokaże placeholdery
