@@ -107,23 +107,78 @@ src/
 
 ## Konfiguracja Sanity CMS
 
-1. Utwórz projekt na sanity.io
-2. Uzupełnij `NEXT_PUBLIC_SANITY_PROJECT_ID` w `.env.local`
-3. Uruchom `npm run dev` i wejdź na `/studio`
+### Pierwsze uruchomienie Studio
 
-### Typy dokumentów CMS
+1. Zaloguj się lub utwórz konto na [sanity.io](https://sanity.io)
+2. Utwórz nowy projekt lub użyj istniejącego (`1me4kdi5`)
+3. Uzupełnij `.env.local`:
+   ```
+   NEXT_PUBLIC_SANITY_PROJECT_ID=1me4kdi5
+   NEXT_PUBLIC_SANITY_DATASET=production
+   ```
+4. Uruchom `npm run dev`
+5. Otwórz **http://localhost:3000/studio**
+6. Zaloguj się kontem Sanity (google lub email)
+7. W panelu Sanity (`manage.sanity.io`) dodaj CORS origin:
+   - `http://localhost:3000` (dev)
+   - `https://spendguru-website.onrender.com` (produkcja)
+   - `https://spendguru.pl` (docelowo)
 
-| Typ | Opis |
+### Typy dokumentów
+
+| Typ | Opis | Gotowy do użycia |
+|---|---|---|
+| `page` | Strony ogólne — bloki sekcji + SEO + język | ✅ |
+| `post` | Artykuły / baza wiedzy | ✅ |
+| `resource` | Zasoby do pobrania (PDF, whitepaper) | ✅ |
+| `caseStudy` | Case Studies | ✅ |
+| `landingPage` | Landing pages z kampanii | ✅ |
+| `useCase` | Zastosowania SpendGuru | ✅ |
+| `industry` | Branże (retail, produkcja…) | ✅ |
+| `persona` | Persony / Dla kogo | ✅ |
+| `faq` | Pytania i odpowiedzi | ✅ |
+
+### Bloki sekcji (page builder)
+
+Strony budowane są z gotowych bloków. Każda strona typu `page` lub `landingPage` ma pole `Sekcje strony`.
+
+| Blok | Odpowiada sekcji na stronie głównej |
 |---|---|
-| `page` | Strony ogólne z blokami sekcji |
-| `post` | Artykuly / wiedza |
-| `resource` | Zasoby do pobrania |
-| `caseStudy` | Case Studies |
-| `landingPage` | Landing pages z kampanii |
-| `useCase` | Zastosowania |
-| `industry` | Branze |
-| `persona` | Persony / dla kogo |
-| `faq` | FAQ |
+| `Hero` | HeroSection |
+| `Proof Bar (loga/liczby)` | ProofBar |
+| `Problem` | ProblemSection |
+| `5 pytań przed negocjacjami` | FiveQuestionsSection ✨ |
+| `Proces` | ProcessSection |
+| `Efekty biznesowe` | BusinessOutcomesSection ✨ |
+| `Dla kogo` | PersonaSection |
+| `Przykład z praktyki (historia)` | UseCaseSection ✨ |
+| `FAQ` | FaqSection |
+| `CTA Section` | CtaSection |
+| `Etapy przygotowania` | Podstrona /etapy |
+| `Zastosowania` | Siatka use cases |
+| `Branże` | Siatka branż |
+| `Siatka zasobów` | Siatka artykułów |
+| `Formularz` | ContactForm |
+
+✨ — bloki dodane w Phase 2
+
+### SEO
+
+Każdy dokument `page`, `post`, `caseStudy`, `landingPage` posiada pole SEO:
+
+| Pole | Opis |
+|---|---|
+| Meta Title | Tytuł w wynikach wyszukiwania |
+| Meta Description | Opis w wynikach (max 160 znaków) |
+| Canonical URL | Kanoniczny URL |
+| OG Title | Tytuł dla social media |
+| OG Description | Opis dla social media |
+| OG Image | Grafika dla social media |
+| No Index | Ukryj przed wyszukiwarkami |
+
+### Wielojęzyczność (PL/EN)
+
+Dokument `page` ma pole `Język` (pl/en). Routing i/18n na poziomie frontendu — do zaimplementowania w kolejnym etapie.
 
 ---
 

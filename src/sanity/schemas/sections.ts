@@ -51,10 +51,11 @@ export const problemBlock = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'heading', title: 'Nagłówek', type: 'string' }),
-    defineField({ name: 'body', title: 'Treść', type: 'blockContent' }),
+    defineField({ name: 'subheading', title: 'Podtytuł', type: 'text', rows: 2 }),
+    defineField({ name: 'body', title: 'Treść (opcjonalnie)', type: 'blockContent' }),
     defineField({
-      name: 'painPoints',
-      title: 'Pain Points',
+      name: 'cards',
+      title: 'Karty problemów',
       type: 'array',
       of: [
         {
@@ -218,15 +219,94 @@ export const formBlock = defineType({
   preview: { select: { title: 'heading' } },
 })
 
+// ─── BLOKI NOWE (Phase 2 / Negotiation Intelligence) ───────────────────────
+
+export const fiveQuestionsBlock = defineType({
+  name: 'fiveQuestionsBlock',
+  title: '5 pytań przed negocjacjami',
+  type: 'object',
+  fields: [
+    defineField({ name: 'heading', title: 'Nagłówek sekcji', type: 'string' }),
+    defineField({ name: 'subheading', title: 'Podtytuł sekcji', type: 'text', rows: 2 }),
+    defineField({
+      name: 'questions',
+      title: 'Pytania',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({ name: 'number', title: 'Numer', type: 'number' }),
+            defineField({ name: 'question', title: 'Pytanie', type: 'string' }),
+            defineField({ name: 'context', title: 'Kontekst / wyjaśnienie', type: 'text', rows: 2 }),
+          ],
+          preview: { select: { title: 'question' } },
+        },
+      ],
+    }),
+  ],
+  preview: { select: { title: 'heading' } },
+})
+
+export const businessOutcomesBlock = defineType({
+  name: 'businessOutcomesBlock',
+  title: 'Efekty biznesowe',
+  type: 'object',
+  fields: [
+    defineField({ name: 'heading', title: 'Nagłówek sekcji', type: 'string' }),
+    defineField({
+      name: 'outcomes',
+      title: 'Efekty',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({ name: 'title', title: 'Tytuł efektu', type: 'string' }),
+            defineField({ name: 'description', title: 'Opis', type: 'text', rows: 2 }),
+            defineField({ name: 'metric', title: 'Metryka (np. 13%, opcjonalnie)', type: 'string' }),
+          ],
+          preview: { select: { title: 'title' } },
+        },
+      ],
+    }),
+  ],
+  preview: { select: { title: 'heading' } },
+})
+
+export const useCaseStoryBlock = defineType({
+  name: 'useCaseStoryBlock',
+  title: 'Przykład z praktyki (historia)',
+  type: 'object',
+  fields: [
+    defineField({ name: 'label', title: 'Etykieta (np. "Przykład z praktyki")', type: 'string' }),
+    defineField({ name: 'heading', title: 'Nagłówek historii', type: 'string' }),
+    defineField({ name: 'context', title: 'Sytuacja wyjściowa', type: 'text', rows: 3 }),
+    defineField({
+      name: 'steps',
+      title: 'Co zrobił SpendGuru',
+      type: 'array',
+      of: [{ type: 'string' }],
+    }),
+    defineField({ name: 'result', title: 'Wynik', type: 'text', rows: 2 }),
+    defineField({ name: 'ctaLabel', title: 'Etykieta CTA', type: 'string' }),
+    defineField({ name: 'ctaUrl', title: 'URL CTA', type: 'string' }),
+  ],
+  preview: { select: { title: 'heading' } },
+})
+
 /** Rejestr wszystkich typów bloków — używany w tablicach sections */
 export const sectionBlocks = [
   'heroBlock',
   'proofBarBlock',
   'problemBlock',
+  'fiveQuestionsBlock',
   'processBlock',
+  'businessOutcomesBlock',
   'stepsBlock',
   'personaBlock',
   'useCaseBlock',
+  'useCaseStoryBlock',
   'industryBlock',
   'resourceGridBlock',
   'faqBlock',
