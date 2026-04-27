@@ -1,5 +1,36 @@
 import { groq } from 'next-sanity'
 
+// ─── Home Page (singleton.home) ──────────────────────────────────────────────
+// Pobiera stronę główną z pełnym rozwinięciem referencji person i dokumentów FAQ.
+// pt::text() konwertuje PortableText na plain string (bez konieczności renderera).
+
+export const homePageQuery = groq`
+  *[_id == "singleton.home"][0] {
+    _id,
+    title,
+    seo,
+    "sections": sections[] {
+      ...,
+      _type == "personaBlock" => {
+        "personas": personas[]->{
+          _id,
+          title,
+          role,
+          description,
+          painPoints
+        }
+      },
+      _type == "faqBlock" => {
+        "items": *[_type == "faq" && context == ^.context] | order(order asc) {
+          _id,
+          question,
+          "answer": pt::text(answer)
+        }
+      }
+    }
+  }
+`
+
 // ─── Page ───────────────────────────────────────────────────────────────────
 
 export const pageQuery = groq`

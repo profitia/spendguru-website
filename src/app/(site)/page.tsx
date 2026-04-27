@@ -9,6 +9,8 @@ import { PersonaSection } from '@/components/sections/PersonaSection'
 import { UseCaseSection } from '@/components/sections/UseCaseSection'
 import { FaqSection } from '@/components/sections/FaqSection'
 import { CtaSection } from '@/components/sections/CtaSection'
+import { SectionRenderer } from '@/components/sections/SectionRenderer'
+import { getHomePage } from '@/sanity/lib/home'
 import { buildMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMetadata({
@@ -17,39 +19,37 @@ export const metadata: Metadata = buildMetadata({
     'SpendGuru pomaga zespołom zakupowym lepiej przygotować negocjacje z dostawcami. Dane kosztowe, benchmarki, prognozy i eksperci Profitii - przed każdą ważną rozmową.',
 })
 
-// TODO: Załadować dane z Sanity CMS (pageQuery dla slug='home')
-export default function HomePage() {
+/** Fallback: statyczny układ z placeholder-content.ts */
+function FallbackHome() {
   return (
     <>
-      {/* 1. Propozycja wartości */}
       <HeroSection />
-
-      {/* 2. Liczby / social proof */}
       <ProofBar />
-
-      {/* 3. Problem: dlaczego negocjacje są trudniejsze */}
       <ProblemSection />
-
-      {/* 4. 5 pytań przed negocjacjami */}
       <FiveQuestionsSection />
-
-      {/* 5. Jak wygląda lepsze przygotowanie — 6 etapów SpendGuru */}
       <ProcessSection />
-
-      {/* 6. Efekty biznesowe */}
       <BusinessOutcomesSection />
-
-      {/* 7. Dla kogo */}
       <PersonaSection />
-
-      {/* 8. Przykład z praktyki */}
       <UseCaseSection />
-
-      {/* 9. FAQ */}
       <FaqSection />
-
-      {/* 10. Końcowe CTA */}
       <CtaSection />
+    </>
+  )
+}
+
+export default async function HomePage() {
+  const page = await getHomePage()
+
+  // Brak danych z Sanity (niezakonfigurowane, błąd, pusty dataset) — fallback
+  if (!page?.sections?.length) {
+    return <FallbackHome />
+  }
+
+  return (
+    <>
+      {page.sections.map((block) => (
+        <SectionRenderer key={block._key} block={block} />
+      ))}
     </>
   )
 }
