@@ -9,8 +9,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Przygotowanie pod i18n (PL/EN) — routing lokalizacyjny dodamy w kolejnym kroku
-  // i18n: { locales: ['pl', 'en'], defaultLocale: 'pl' },
+  // Sanity Studio uses styled-components and other browser-only modules.
+  // Marking these packages as external for the server bundle prevents
+  // webpack from trying to resolve styled-components during SSR/build.
+  serverExternalPackages: ['sanity', 'next-sanity', '@sanity/vision', '@sanity/image-url'],
 }
 
 export default nextConfig
