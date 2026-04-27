@@ -199,6 +199,7 @@ export async function getHomePage(): Promise<HomePageData | null> {
       {},
       { next: { revalidate: 60 } },
     )
+
     return data ?? null
   } catch (err) {
     // Nie wyrzucamy — strona pokaże placeholdery
