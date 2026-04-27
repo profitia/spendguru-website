@@ -1,10 +1,10 @@
-// Sanity Studio dostępne pod /studio
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const NextStudio = require('next-sanity/studio').NextStudio
-import sanityConfig from '../../../../sanity.config'
+import { NextStudio } from 'next-sanity/studio'
+import config from '../../../../sanity.config'
 
-export const dynamic = 'force-static'
+export { metadata, viewport } from 'next-sanity/studio'
+
+export const dynamic = 'force-dynamic'
 
 export default function StudioPage() {
-  return <NextStudio config={sanityConfig} />
+  return <NextStudio config={config} />
 }
