@@ -9,8 +9,14 @@ export const isSanityConfigured = Boolean(
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
 )
 
-// Token może być pusty string z .env — traktujemy to jako brak tokenu
-const readToken = process.env.SANITY_API_READ_TOKEN || undefined
+// Token może być pusty string z .env — traktujemy to jako brak tokenu.
+// UWAGA: Sanity ACL używa path("*") który NIE pasuje do IDs z kropką (np. singleton.home).
+// Rozwiązanie A (stałe): zmień filter w manage.sanity.io → Access → Public group → path("**")
+// Rozwiązanie B (tymczasowe): token do odczytu — fallback na write token (server-side, bezpieczne)
+const readToken =
+  process.env.SANITY_API_READ_TOKEN ||
+  process.env.SANITY_API_WRITE_TOKEN ||
+  undefined
 
 /** Klient z CDN — do statycznych stron, gdzie akceptowalny jest krótki lag */
 export const client = createClient({
