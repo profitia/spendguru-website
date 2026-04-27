@@ -14,23 +14,23 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[var(--color-neutral-200)] bg-white/95 backdrop-blur-sm">
       <Container>
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 items-center justify-between lg:h-[72px]">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl text-[var(--color-foreground)]">
+          <Link href="/" className="flex shrink-0 items-center gap-2 font-bold text-xl text-[var(--color-foreground)]">
             <span className="text-[var(--color-primary)]">Spend</span>Guru
             <span className="hidden text-xs font-normal text-[var(--color-neutral-500)] sm:block">
               by Profitia
             </span>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Nawigacja główna">
+          {/* Desktop nav — widoczna od lg (1024 px) */}
+          <nav className="hidden lg:flex items-center gap-5" aria-label="Nawigacja główna">
             {mainNav.map((item) => (
               <div key={item.href} className="relative group">
                 <Link
                   href={item.href}
                   className={cn(
-                    'text-sm font-medium text-[var(--color-neutral-700)]',
+                    'whitespace-nowrap text-sm font-medium text-[var(--color-neutral-700)]',
                     'hover:text-[var(--color-primary)] transition-colors duration-[var(--transition-fast)]',
                   )}
                 >
@@ -57,15 +57,16 @@ export default function Header() {
 
           {/* CTA + hamburger */}
           <div className="flex items-center gap-3">
-            <Button href={ctaNav.href} size="sm" className="hidden sm:inline-flex">
+            {/* CTA — tylko desktop (lg+) */}
+            <Button href={ctaNav.href} size="sm" className="hidden lg:inline-flex whitespace-nowrap">
               {ctaNav.label}
             </Button>
 
-            {/* Hamburger — tylko mobile/tablet */}
+            {/* Hamburger — mobile i tablet (poniżej lg) */}
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="md:hidden p-2 text-[var(--color-neutral-700)] hover:text-[var(--color-primary)]"
+              className="lg:hidden p-2 text-[var(--color-neutral-700)] hover:text-[var(--color-primary)]"
               aria-label="Otwórz menu"
               aria-expanded={mobileOpen}
             >
